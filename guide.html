@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>如何新增內容｜求職小幫手 Pro</title>
+  <meta name="page-type" content="guide">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700&display=swap">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site-header"><div class="inner">
+  <a class="logo" href="index.html">求職<span>小幫手 Pro</span></a>
+  <nav class="nav"><a href="index.html">職缺清單</a><a href="guide.html" aria-current="page">如何新增</a></nav>
+</div></header>
+
+<main>
+  <div class="breadcrumb"><a href="index.html">首頁</a> › 如何新增</div>
+  <h1>如何新增一則職缺</h1>
+  <p>這一頁是 <code>AGENTS.md</code> 與 <code>rules/</code> 的網頁版摘要，給人看；AI 請直接讀規則檔。</p>
+
+  <section class="card">
+    <h2>三個步驟</h2>
+    <ol>
+      <li>把職缺原文存成 <code>raw/jobs/YYYY-MM-公司-職位.md</code>。</li>
+      <li>對 AI 說：
+        <div class="callout">請先讀 AGENTS.md。我在 raw/jobs/ 放了新職缺 &lt;slug&gt;，請依第 8 節流程完成 ②–⑤，公司資料請上網蒐集並附來源，跑完 check.py 把結果貼給我，先不要 commit。</div>
+      </li>
+      <li>看過結果、開新對話做審查，沒問題就 commit、push。</li>
+    </ol>
+    <div class="callout callout-warn">要分析<strong>真實公司</strong>時，結果請存在 <code>private/</code>，不要放上公開網站。屎缺判斷可能有誤，公開可能造成名譽爭議。</div>
+  </section>
+
+  <section class="card">
+    <h2>AI 會產出什麼</h2>
+    <div class="table-wrap"><table class="score-table">
+      <thead><tr><th>頁面</th><th>內容</th><th>細則</th></tr></thead>
+      <tbody>
+        <tr><td>職缺解析</td><td>條件拆解、適配度 100 分、落差與補強</td><td>AGENTS.md</td></tr>
+        <tr><td>公司診斷</td><td>公司現況、職缺角色與痛點、五大維度、屎缺機率與類型</td><td>rules/company-diagnosis.md</td></tr>
+        <tr><td>職涯適配</td><td>正面發揮、影響、方向、侷限、願景對齊、互動問答</td><td>rules/career-fit.md</td></tr>
+        <tr><td>面試攻略</td><td>10 題模擬面試＋至少 5 題反問</td><td>rules/interview.md</td></tr>
+        <tr><td>客製化履歷</td><td>依職缺改寫，附改動理由</td><td>AGENTS.md</td></tr>
+      </tbody>
+    </table></div>
+    <p><small>適配度低於 60 的職缺只做職缺解析，不深挖。</small></p>
+  </section>
+
+  <section class="card">
+    <h2>屎缺機率怎麼算</h2>
+    <p>基準 20%，依 9 個風險訊號（重複刊登、裁員、一人多工、主管異動……）加分，5 個保護訊號（有預算、高薪、晉升路徑……）減分，結果限制在 5%–95%。<strong>沒有證據的訊號不計分</strong>，改成面試時的反問題。</p>
+    <p>超過 60% 時，再依「控制度 × 回報度」分成四型：</p>
+    <div class="matrix">
+      <div class="axis axis-row"></div><div class="axis">回報度低</div><div class="axis">回報度高</div>
+      <div class="axis axis-row">控制度低</div><div class="neg">背鍋型（負向）</div><div class="pos">修練型（正向）</div>
+      <div class="axis axis-row">控制度高</div><div class="neg">消耗型（負向）</div><div class="pos">救火型（正向）</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>不能踩的線</h2>
+    <ul>
+      <li><strong>不捏造</strong>：履歷與面試回答只能用 <code>profile/profile.md</code> 的事實。</li>
+      <li><strong>不憑印象寫公司</strong>：每個公司事實都要有來源代碼；沒有上網工具時要停下來問。</li>
+      <li><strong>不公開真實公司的診斷</strong>：存在 <code>private/</code>。</li>
+      <li><strong>「做完了」由腳本決定</strong>：<code>python3 scripts/check.py</code> 要顯示 <code>ALL CHECKS PASSED</code>。</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>想加新的頁面類型？</h2>
+    <p>例如「求職信」「薪資談判稿」。四個地方要一起改：</p>
+    <ol>
+      <li><code>templates/</code> 新增模板</li>
+      <li><code>AGENTS.md</code> 第 4 節頁面總表＋ <code>rules/</code> 新增細則</li>
+      <li><code>scripts/check.py</code> 的 <code>PAGE_RULES</code> 加檢查</li>
+      <li>這一頁加說明</li>
+    </ol>
+  </section>
+</main>
+
+<footer class="site-footer"><div class="inner">
+  求職小幫手 Pro・規則見 AGENTS.md 與 rules/
+</div></footer>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!doctype html>
+<!--
+  career 頁模板。細則見 rules/。複製到 career/<slug>.html，把所有 {{...}} 換掉。
+  不可刪除任何 <section id="...">，不可改 id，不可加 inline style。
+-->
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{職稱}}｜{{公司}} — 職涯適配｜求職小幫手 Pro</title>
+  <meta name="page-type" content="career">
+  <meta name="slug" content="{{slug}}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700&display=swap">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site-header"><div class="inner">
+  <a class="logo" href="../index.html">求職<span>小幫手 Pro</span></a>
+  <nav class="nav"><a href="../index.html">職缺清單</a><a href="../guide.html">如何新增</a></nav>
+</div></header>
+
+<main>
+  <div class="breadcrumb"><a href="../index.html">首頁</a> › 職涯適配</div>
+  <h1>{{職稱}}</h1>
+  <p class="company">{{公司}}</p>
+  <nav class="subnav">
+    <a href="../jobs/{{slug}}.html">職缺解析</a>
+    <a href="../resumes/{{slug}}.html">客製化履歷</a>
+    <a href="../company/{{slug}}.html">公司診斷</a>
+    <a href="../career/{{slug}}.html" aria-current="page">職涯適配</a>
+    <a href="../interview/{{slug}}.html">面試攻略</a>
+  </nav>
+
+  <section id="strengths-use" class="card"><h2>正面發揮</h2><ul><li>{{}}（{{E?}}）</li></ul></section>
+  <section id="impact" class="card"><h2>可能影響</h2><ul><li>{{}}</li></ul></section>
+  <section id="direction" class="card"><h2>未來方向</h2><ol><li>{{}}</li></ol></section>
+  <section id="limits" class="card"><h2>可能侷限</h2><ul><li>{{}}</li></ul></section>
+  <section id="alignment" class="card">
+    <h2>願景對齊度</h2>
+    <div class="table-wrap"><table class="score-table">
+      <thead><tr><th>願景項目</th><th>這個職缺的狀況</th><th>對齊</th><th>依據</th></tr></thead>
+      <tbody><tr><td>{{V?／價值／N?}}</td><td>{{}}</td><td>{{✅ 一致／⚠️ 部分／❌ 衝突／❓ 待確認}}</td><td>{{}}</td></tr></tbody>
+    </table></div>
+  </section>
+  <section id="qa" class="card">
+    <h2>釐清問答</h2>
+    <form class="qa-form" data-job="{{slug}}" data-result="qa-result">
+      <fieldset>
+        <legend>1. {{針對這個職缺的問題}}</legend>
+        <label><input type="radio" name="q1" value="a" data-weight="2">{{選項}}</label>
+        <label><input type="radio" name="q1" value="b" data-weight="0">{{選項}}</label>
+        <label><input type="radio" name="q1" value="c" data-weight="-2">{{選項}}</label>
+      </fieldset>
+      <div class="btn-row"><button class="btn" type="submit">看結果</button><button class="btn btn-ghost" type="reset">重填</button></div>
+    </form>
+    <div id="qa-result" class="callout qa-result"><div data-out></div></div>
+  </section>
+  <section id="decision" class="card"><h2>結論</h2><p>{{建議＋關鍵理由＋進場前必確認的一件事}}</p></section>
+<script src="../assets/qa.js"></script>
+</main>
+
+<footer class="site-footer"><div class="inner">
+  本頁依 AGENTS.md 與 rules/ 規則產出。範例人物、公司與新聞皆為虛構。
+</div></footer>
+</body>
+</html>

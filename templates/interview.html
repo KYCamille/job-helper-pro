@@ -1,0 +1,63 @@
+<!doctype html>
+<!--
+  interview 頁模板。細則見 rules/。複製到 interview/<slug>.html，把所有 {{...}} 換掉。
+  不可刪除任何 <section id="...">，不可改 id，不可加 inline style。
+-->
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{職稱}}｜{{公司}} — 面試攻略｜求職小幫手 Pro</title>
+  <meta name="page-type" content="interview">
+  <meta name="slug" content="{{slug}}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700&display=swap">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site-header"><div class="inner">
+  <a class="logo" href="../index.html">求職<span>小幫手 Pro</span></a>
+  <nav class="nav"><a href="../index.html">職缺清單</a><a href="../guide.html">如何新增</a></nav>
+</div></header>
+
+<main>
+  <div class="breadcrumb"><a href="../index.html">首頁</a> › 面試攻略</div>
+  <h1>{{職稱}}</h1>
+  <p class="company">{{公司}}</p>
+  <nav class="subnav">
+    <a href="../jobs/{{slug}}.html">職缺解析</a>
+    <a href="../resumes/{{slug}}.html">客製化履歷</a>
+    <a href="../company/{{slug}}.html">公司診斷</a>
+    <a href="../career/{{slug}}.html">職涯適配</a>
+    <a href="../interview/{{slug}}.html" aria-current="page">面試攻略</a>
+  </nav>
+
+  <section id="questions" class="card">
+    <h2>模擬面試 10 題</h2>
+    <article class="qa-card">
+      <h3>Q1. {{題目}} <span class="tag">{{類別}}</span></h3>
+      <div class="assess"><span class="label">考評核心</span>{{}}</div>
+      <div class="answer"><span class="label">建議回答</span>{{STAR，只用 profile.md 事實}}</div>
+      <div class="keys"><span class="label">掌握關鍵</span>{{}}</div>
+    </article>
+  </section>
+  <section id="reverse" class="card">
+    <h2>反問題（開放問答時間）</h2>
+    <article class="qa-card">
+      <h3>R1. {{問題}} <span class="tag">{{面向}}</span></h3>
+      <div class="purpose"><span class="label">想窺探什麼</span>{{}}</div>
+      <div class="good"><span class="label">好的訊號</span>{{}}</div>
+      <div class="red"><span class="label">紅旗訊號</span>{{}}</div>
+    </article>
+  </section>
+  <section id="sources" class="card">
+    <h2>資料來源</h2>
+    <ul><li>同職缺的 <a href="../jobs/{{slug}}.html">職缺解析</a>、<a href="../company/{{slug}}.html">公司診斷</a>、<a href="../career/{{slug}}.html">職涯適配</a></li></ul>
+  </section>
+</main>
+
+<footer class="site-footer"><div class="inner">
+  本頁依 AGENTS.md 與 rules/ 規則產出。範例人物、公司與新聞皆為虛構。
+</div></footer>
+</body>
+</html>

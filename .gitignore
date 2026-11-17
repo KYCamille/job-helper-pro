@@ -1,0 +1,4 @@
+# 真實個資永遠不上傳（見 AGENTS.md 第 11 節）
+private/
+.DS_Store
+__pycache__/

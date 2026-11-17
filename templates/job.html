@@ -1,0 +1,116 @@
+<!doctype html>
+<!--
+  職缺解析頁模板（AGENTS.md 第 4.1 節）
+  使用方式：複製到 jobs/<slug>.html，把所有 {{...}} 換掉。
+  不可刪除任何 <section id="...">，不可改 id，不可加 inline style。
+-->
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{職稱}}｜{{公司}} — 職缺解析｜求職小幫手 Pro</title>
+  <meta name="page-type" content="job">
+  <meta name="slug" content="{{slug}}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700&display=swap">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site-header"><div class="inner">
+  <a class="logo" href="../index.html">求職<span>小幫手 Pro</span></a>
+  <nav class="nav"><a href="../index.html">職缺清單</a><a href="../guide.html">如何新增</a></nav>
+</div></header>
+
+<main>
+  <div class="breadcrumb"><a href="../index.html">首頁</a> › 職缺解析</div>
+  <h1>{{職稱}} <span class="badge {{badge-high|badge-mid|badge-low}}">{{等級文字}} {{總分}}</span></h1>
+  <p class="company">{{公司}}</p>
+  <nav class="subnav">
+    <a href="../jobs/{{slug}}.html" aria-current="page">職缺解析</a>
+    <a href="../resumes/{{slug}}.html">客製化履歷</a>
+    <a href="../company/{{slug}}.html">公司診斷</a>
+    <a href="../career/{{slug}}.html">職涯適配</a>
+    <a href="../interview/{{slug}}.html">面試攻略</a>
+  </nav>
+  <div class="btn-row">
+    <a class="btn" href="../resumes/{{slug}}.html">→ 看客製化履歷</a>
+    <!-- 等級為 badge-low 時改成：<span class="btn btn-ghost">未產出履歷（分數低於 60）</span> -->
+  </div>
+
+  <section id="summary" class="card">
+    <h2>職缺摘要</h2>
+    <dl class="meta">
+      <dt>公司</dt><dd>{{公司}}</dd>
+      <dt>地點</dt><dd>{{地點}}</dd>
+      <dt>型態</dt><dd>{{全職／兼職／遠端規定}}</dd>
+      <dt>薪資</dt><dd>{{薪資或「未揭露」}}</dd>
+    </dl>
+    <p>{{一句話說明這份工作在做什麼}}</p>
+  </section>
+
+  <section id="requirements" class="card">
+    <h2>條件拆解</h2>
+    <div class="two-col">
+      <div>
+        <h3>必備</h3>
+        <ul>
+          <li>{{條件}} <small>JD：「{{原文片段}}」</small></li>
+        </ul>
+      </div>
+      <div>
+        <h3>加分</h3>
+        <ul>
+          <li>{{條件}} <small>JD：「{{原文片段}}」</small></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="keywords" class="card">
+    <h2>關鍵字</h2>
+    <p><span class="tag">{{關鍵字}}</span></p>
+  </section>
+
+  <section id="match" class="card">
+    <h2>適配度評分</h2>
+    <div class="table-wrap"><table class="score-table">
+      <thead><tr><th>面向</th><th>得分</th><th>依據</th></tr></thead>
+      <tbody>
+        <tr><td>硬技能</td><td class="num">{{n}} / 40</td><td>{{依據，引用 profile.md 段落編號}}</td></tr>
+        <tr><td>相關經驗</td><td class="num">{{n}} / 30</td><td>{{依據}}</td></tr>
+        <tr><td>產業／領域</td><td class="num">{{n}} / 15</td><td>{{依據}}</td></tr>
+        <tr><td>軟實力與工作型態</td><td class="num">{{n}} / 15</td><td>{{依據}}</td></tr>
+        <tr class="total"><td>總分</td><td class="num" data-total>{{總分}} / 100</td><td>{{等級說明}}</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="gaps" class="card">
+    <h2>落差與補強</h2>
+    <ul>
+      <li><strong>{{落差}}</strong>：{{一週內可完成的具體行動}}</li>
+    </ul>
+  </section>
+
+  <section id="interview" class="card">
+    <h2>面試準備</h2>
+    <ol>
+      <li><strong>{{可能的問題}}</strong><br>回答方向：{{對應 profile.md 的經歷編號與重點}}</li>
+    </ol>
+  </section>
+
+  <section id="sources" class="card">
+    <h2>資料來源</h2>
+    <ul>
+      <li>職缺原文：<a href="../raw/jobs/{{slug}}.md">raw/jobs/{{slug}}.md</a></li>
+      <li>求職者主履歷：<a href="../profile/profile.md">profile/profile.md</a></li>
+      <li>解析日期：{{YYYY-MM-DD}}</li>
+    </ul>
+  </section>
+</main>
+
+<footer class="site-footer"><div class="inner">
+  本頁依 AGENTS.md 規則產出。範例人物與公司皆為虛構。
+</div></footer>
+</body>
+</html>

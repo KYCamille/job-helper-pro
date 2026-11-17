@@ -1,0 +1,107 @@
+<!doctype html>
+<!--
+  company 頁模板。細則見 rules/。複製到 company/<slug>.html，把所有 {{...}} 換掉。
+  不可刪除任何 <section id="...">，不可改 id，不可加 inline style。
+-->
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{職稱}}｜{{公司}} — 公司診斷｜求職小幫手 Pro</title>
+  <meta name="page-type" content="company">
+  <meta name="slug" content="{{slug}}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700&display=swap">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site-header"><div class="inner">
+  <a class="logo" href="../index.html">求職<span>小幫手 Pro</span></a>
+  <nav class="nav"><a href="../index.html">職缺清單</a><a href="../guide.html">如何新增</a></nav>
+</div></header>
+
+<main>
+  <div class="breadcrumb"><a href="../index.html">首頁</a> › 公司診斷</div>
+  <h1>{{職稱}}</h1>
+  <p class="company">{{公司}}</p>
+  <nav class="subnav">
+    <a href="../jobs/{{slug}}.html">職缺解析</a>
+    <a href="../resumes/{{slug}}.html">客製化履歷</a>
+    <a href="../company/{{slug}}.html" aria-current="page">公司診斷</a>
+    <a href="../career/{{slug}}.html">職涯適配</a>
+    <a href="../interview/{{slug}}.html">面試攻略</a>
+  </nav>
+
+  <section id="company-brief" class="card">
+    <h2>公司現況與發展</h2>
+    <ul>
+      <li>{{一句事實}}（{{代碼}}）</li>
+    </ul>
+  </section>
+
+  <section id="role" class="card">
+    <h2>職缺角色與要解決的痛點</h2>
+    <p>主角色：<span class="tag">{{建設者／維運者／救火者／轉譯者／擴張者／替補者}}</span></p>
+    <div class="table-wrap"><table class="score-table">
+      <thead><tr><th>公司處境</th><th>衍生痛點</th><th>被期待的角色</th><th>依據</th></tr></thead>
+      <tbody><tr><td>{{}}</td><td>{{}}</td><td>{{}}</td><td>{{代碼}}</td></tr></tbody>
+    </table></div>
+  </section>
+
+  <section id="dimensions" class="card">
+    <h2>五大維度</h2>
+    <div class="table-wrap"><table class="score-table">
+      <thead><tr><th>維度</th><th>分數</th><th>判斷與依據</th></tr></thead>
+      <tbody>
+        <tr><td>重要性</td><td class="num" data-dim="importance"><span class="meter" data-score="{{1-5}}"><i></i><i></i><i></i><i></i><i></i></span> {{n}}/5</td><td>{{}}</td></tr>
+        <tr><td>急迫性</td><td class="num" data-dim="urgency"><span class="meter" data-score="{{1-5}}"><i></i><i></i><i></i><i></i><i></i></span> {{n}}/5</td><td>{{}}</td></tr>
+        <tr><td>影響性</td><td class="num" data-dim="impact"><span class="meter" data-score="{{1-5}}"><i></i><i></i><i></i><i></i><i></i></span> {{n}}/5</td><td>{{}}</td></tr>
+        <tr><td>期待性</td><td class="num" data-dim="expectation"><span class="meter" data-score="{{1-5}}"><i></i><i></i><i></i><i></i><i></i></span> {{n}}/5</td><td>{{}}</td></tr>
+        <tr><td>可談判性</td><td class="num" data-dim="negotiability"><span class="meter" data-score="{{1-5}}"><i></i><i></i><i></i><i></i><i></i></span> {{n}}/5</td><td>{{}}</td></tr>
+      </tbody>
+    </table></div>
+    <h3>可以談的項目</h3>
+    <ul><li>{{項目}}：{{建議策略}}</li></ul>
+  </section>
+
+  <section id="trap" class="card">
+    <h2>屎缺判定</h2>
+    <p class="prob {{prob-low|prob-mid|prob-high}}">{{NN}}%</p>
+    <div class="table-wrap"><table class="score-table">
+      <thead><tr><th>訊號</th><th>分數</th><th>依據</th></tr></thead>
+      <tbody>
+        <tr><td>基準</td><td class="num" data-signal>+20</td><td>所有職缺共同基準</td></tr>
+        <tr><td>{{R?／P? 名稱}}</td><td class="num" data-signal>{{+n／−n}}</td><td>{{代碼與說明}}</td></tr>
+        <tr class="total"><td>屎缺機率</td><td class="num" data-trap-total>{{NN}}%</td><td>{{低風險／需留意／高風險}}</td></tr>
+      </tbody>
+    </table></div>
+    <h3>待確認（沒有證據，不計分，轉成面試反問）</h3>
+    <ul><li>{{R?}}：{{要確認什麼}}</li></ul>
+  </section>
+
+  <!-- 機率 > 60% 才保留這個區塊；≤ 60% 請整段刪除 -->
+  <section id="trap-type" class="card">
+    <h2>屎缺類型</h2>
+    <div class="matrix">
+      <div class="axis axis-row"></div><div class="axis">回報度低</div><div class="axis">回報度高</div>
+      <div class="axis axis-row">控制度低</div><div class="neg">背鍋型（負向）</div><div class="pos">修練型（正向）</div>
+      <div class="axis axis-row">控制度高</div><div class="neg">消耗型（負向）</div><div class="pos">救火型（正向）</div>
+    </div>
+    <p>{{判定理由、流動率高的根本原因、適合誰、進場前必談條件}}</p>
+  </section>
+
+  <section id="sources" class="card">
+    <h2>資料來源</h2>
+    <ul>
+      <li>公司資料：<a href="../raw/companies/{{公司}}.md">raw/companies/{{公司}}.md</a></li>
+      <li>職缺原文：<a href="../raw/jobs/{{slug}}.md">raw/jobs/{{slug}}.md</a></li>
+      <li>分析日期：{{YYYY-MM-DD}}</li>
+    </ul>
+  </section>
+</main>
+
+<footer class="site-footer"><div class="inner">
+  本頁依 AGENTS.md 與 rules/ 規則產出。範例人物、公司與新聞皆為虛構。
+</div></footer>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!doctype html>
+<!--
+  客製化履歷頁模板（AGENTS.md 第 4.2 節）
+  使用方式：複製到 resumes/<slug>.html，把所有 {{...}} 換掉。
+  所有事實必須來自 profile/profile.md（AGENTS.md 第 5 節誠實原則）。
+-->
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{姓名}} 履歷 — {{職稱}}｜求職小幫手 Pro</title>
+  <meta name="page-type" content="resume">
+  <meta name="slug" content="{{slug}}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700&display=swap">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site-header"><div class="inner">
+  <a class="logo" href="../index.html">求職<span>小幫手 Pro</span></a>
+  <nav class="nav"><a href="../index.html">職缺清單</a><a href="../guide.html">如何新增</a></nav>
+</div></header>
+
+<main>
+  <div class="breadcrumb"><a href="../index.html">首頁</a> › 客製化履歷</div>
+  <h1>{{姓名}}</h1>
+  <nav class="subnav">
+    <a href="../jobs/{{slug}}.html">職缺解析</a>
+    <a href="../resumes/{{slug}}.html" aria-current="page">客製化履歷</a>
+    <a href="../company/{{slug}}.html">公司診斷</a>
+    <a href="../career/{{slug}}.html">職涯適配</a>
+    <a href="../interview/{{slug}}.html">面試攻略</a>
+  </nav>
+
+  <section id="target" class="card">
+    <h2>投遞目標</h2>
+    <p>{{職稱}}｜{{公司}}　<a href="../jobs/{{slug}}.html">← 看職缺解析</a></p>
+  </section>
+
+  <section id="headline" class="card">
+    <h2>個人摘要</h2>
+    <p>{{2–3 句，第一句含最重要的 1–2 個關鍵字}}</p>
+  </section>
+
+  <section id="skills" class="card">
+    <h2>技能</h2>
+    <p><span class="tag">{{依相關度排序的技能}}</span></p>
+  </section>
+
+  <section id="experience" class="card">
+    <h2>工作經歷</h2>
+    <div class="resume-item">
+      <h3>{{職稱}}｜{{公司}}</h3>
+      <div class="when">{{期間}}</div>
+      <ul>
+        <li>{{動詞 + 做了什麼 + 量化結果}}</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="projects" class="card">
+    <h2>專案</h2>
+    <ul>
+      <li><strong>{{專案名}}</strong>：{{說明}}</li>
+    </ul>
+  </section>
+
+  <section id="education" class="card">
+    <h2>學歷與證照</h2>
+    <ul>
+      <li>{{照抄 profile.md}}</li>
+    </ul>
+  </section>
+
+  <section id="changes" class="card">
+    <h2>改了什麼、為什麼</h2>
+    <div class="table-wrap"><table class="score-table">
+      <thead><tr><th>主履歷原句</th><th>客製化後</th><th>理由</th></tr></thead>
+      <tbody>
+        <tr><td>{{原句（附編號）}}</td><td>{{新句}}</td><td>{{對應 JD 關鍵字}}</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <div class="btn-row">
+    <a class="btn btn-ghost" href="../jobs/{{slug}}.html">← 回職缺解析</a>
+  </div>
+</main>
+
+<footer class="site-footer"><div class="inner">
+  本頁依 AGENTS.md 規則產出，所有事實來自 profile/profile.md。範例人物與公司皆為虛構。列印時「改了什麼」區塊會自動隱藏。
+</div></footer>
+</body>
+</html>
