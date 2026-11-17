@@ -26,6 +26,7 @@
     <a href="../company/2026-11-qingsong-ai-product-specialist.html">公司診斷</a>
     <a href="../career/2026-11-qingsong-ai-product-specialist.html" aria-current="page">職涯適配</a>
     <a href="../interview/2026-11-qingsong-ai-product-specialist.html">面試攻略</a>
+    <a href="../reality/2026-11-qingsong-ai-product-specialist.html">現實度匹配</a>
   </nav>
 
   <section id="strengths-use" class="card">
@@ -141,11 +142,84 @@
     <div id="qa-result" class="callout qa-result"><div data-out></div></div>
   </section>
 
+  <section id="qual" class="card">
+    <h2>質性對答</h2>
+    <p>量性問卷告訴你「方向對不對」，這裡的開放式問題幫你找出「為什麼」。一次一題，回答後會依你的內容追問一題。全部答完會整理出你最在意的主題，並和這個職缺的風險比對；也可以下載紀錄，交給 AI 做深度分析（rules/career-fit.md §5.3）。答案只存在你的瀏覽器裡。</p>
+    <div class="qual" data-job="2026-11-qingsong-ai-product-specialist" data-title="AI 產品專員｜青松 AI 科技" data-risks="穩定,主管與團隊,工時與生活,薪資">
+      <div class="qual-q" data-theme="AI 與技術" data-followups='[{"if":"AI|產品|履歷","ask":"如果只能留下一個理由，是哪一個？"},{"default":"可以舉一個具體的例子嗎？"}]'>
+        <label for="qual-1">1. 這個職缺最吸引你的是什麼？請說得具體一點。</label>
+        <textarea id="qual-1" rows="4" placeholder="想到什麼就寫什麼，越具體越好"></textarea>
+      </div>
+      <div class="qual-q" data-theme="主管與團隊" data-followups='[{"if":"怕|焦慮|沒人|不安","ask":"上一次遇到類似狀況，後來是怎麼度過的？"},{"if":"可以|沒問題|自己","ask":"如果三個月內都沒有主管，遇到需要拍板的決定你會怎麼做？"},{"default":"可以舉一個具體的例子嗎？"}]'>
+        <label for="qual-2">2. 產品主管已經離職，進去可能沒有人帶，你想像那個狀態會是怎樣？</label>
+        <textarea id="qual-2" rows="4" placeholder="想到什麼就寫什麼，越具體越好"></textarea>
+      </div>
+      <div class="qual-q" data-theme="穩定" data-followups='[{"if":"擔心|怕|還好|應該","ask":"如果一年內真的又縮編，你的第一個反應會是什麼？"},{"default":"可以舉一個具體的例子嗎？"}]'>
+        <label for="qual-3">3. 公司半年前才裁員 15%，你怎麼看這件事？</label>
+        <textarea id="qual-3" rows="4" placeholder="想到什麼就寫什麼，越具體越好"></textarea>
+      </div>
+      <div class="qual-q" data-theme="薪資" data-followups='[{"if":"可以|接受|願意","ask":"少多少是你的極限？為什麼是這個數字？"},{"if":"不|沒辦法","ask":"如果職稱或成長機會更好，會改變你的想法嗎？"},{"default":"可以舉一個具體的例子嗎？"}]'>
+        <label for="qual-4">4. 薪資可能比現在少一點，你願意接受嗎？</label>
+        <textarea id="qual-4" rows="4" placeholder="想到什麼就寫什麼，越具體越好"></textarea>
+      </div>
+      <div class="qual-q" data-theme="工時與生活" data-followups='[{"if":"溝通|安撫|擅長","ask":"如果客戶的要求不合理，而你又沒有主管可以擋呢？"},{"default":"可以舉一個具體的例子嗎？"}]'>
+        <label for="qual-5">5. 被金控客戶追著要東西時，你通常會有什麼反應？</label>
+        <textarea id="qual-5" rows="4" placeholder="想到什麼就寫什麼，越具體越好"></textarea>
+      </div>
+      <div class="qual-q" data-theme="職涯方向" data-followups='[{"if":"上線|案例|產品","ask":"如果專案延期，一年後還沒上線呢？"},{"default":"可以舉一個具體的例子嗎？"}]'>
+        <label for="qual-6">6. 一年後如果離開，你最想帶走什麼？</label>
+        <textarea id="qual-6" rows="4" placeholder="想到什麼就寫什麼，越具體越好"></textarea>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" type="button" data-act="prev">上一題</button>
+        <button class="btn" type="button" data-act="next">下一步</button>
+        <button class="btn btn-ghost" type="button" data-act="reset">清除重來</button>
+        <span class="qual-progress"></span>
+      </div>
+      <div class="qual-out callout">
+        <div data-summary></div>
+        <label for="qual-md-2026-11-qingsong-ai-product-specialist"><strong>訪談紀錄（Markdown）</strong></label>
+        <textarea id="qual-md-2026-11-qingsong-ai-product-specialist" rows="8" readonly></textarea>
+        <div class="btn-row">
+          <button class="btn" type="button" data-act="copy">複製</button>
+          <button class="btn btn-ghost" type="button" data-act="download">下載 .md</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="qual-analysis" class="card">
+    <h2>質性分析（範例）</h2>
+    <p><small>依虛構人物的訪談紀錄 <a href="../raw/qa/2026-11-qingsong-ai-product-specialist.md">raw/qa/2026-11-qingsong-ai-product-specialist.md</a> 分析。你自己的紀錄請交給 AI，結果存在 private/。</small></p>
+    <h3>你真正在意的事</h3>
+    <ul>
+      <li><strong>拿到稀缺經歷</strong>：「履歷上會有『AI 產品上線』這一段，這個以後很難再有機會拿到」，這是去這份工作唯一、也很強的理由。</li>
+      <li><strong>需要有人可以問</strong>：「如果完全沒有那樣的人，我不確定撐不撐得住」，過去沒人帶的焦慮經驗很深刻。</li>
+      <li><strong>經濟安全</strong>：「家裡的房貸我有分擔一部分，不能沒有收入太久」，這是 vision.md 沒寫到的新資訊。</li>
+      <li><strong>不擅長拒絕</strong>：「我可能會自己扛下來加班做」，在沒有主管擋的環境裡容易過勞。</li>
+    </ul>
+    <h3>說法之間的矛盾</h3>
+    <ul>
+      <li><strong>成長 vs. 穩定</strong>：vision.md 把「成長」排第 1、「穩定」排第 3，也說願意為成長接受薪資持平。但訪談中一想到房貸，底線就變成「持平」，對縮編的反應是「很慌」。<strong>實際上穩定與收入排在成長前面。</strong></li>
+      <li><strong>「可以接受沒人帶」vs. 過去的焦慮經驗</strong>：量性問卷可能選「短期可以」，但質性回答顯示這是你最脆弱的地方。</li>
+    </ul>
+    <h3>這對這個職缺代表什麼</h3>
+    <ul>
+      <li>你最在意的「有人帶」與「穩定」，正好是這個職缺分數最高的風險（R5 主管異動、R2 裁員、N1 一人部門）。</li>
+      <li>「不擅長拒絕」＋「沒有主管擋」＝ 控制度會比公司診斷估計的更低，修練型有滑向<strong>背鍋型</strong>的風險。</li>
+      <li>薪資底線要從「接受短期少一點」修正為「至少持平 4.6 萬」，對應面試反問 R8。</li>
+    </ul>
+    <h3>結論是否改變</h3>
+    <p><strong>調整為：只有「已確認有直屬主管」且「薪資至少持平」兩個條件同時成立才考慮。</strong>這比原本「談好條件後再投」更嚴格，因為質性對答顯示你實際的風險承受度比 vision.md 寫的低。建議同時積極推進光點電商的機會，作為談判時的替代方案。</p>
+  </section>
+
   <section id="decision" class="card">
     <h2>結論</h2>
     <p><strong>建議：談好條件後再投。</strong>這是最能實現 V2（懂資料也懂 AI）的職缺，但屎缺機率 75%，而且可能違反 N1（沒有人帶）與價值 4（薪資）。關鍵理由是：它的價值完全取決於你能不能談到足夠的「控制度」（主管、範圍、職稱）。<strong>進場前一定要確認：</strong>誰是你的直屬主管、產品團隊還有幾個人。如果答案是「沒有、只有你」，建議不要去。</p>
+    <div class="callout callout-warn"><strong>質性分析後調整：</strong>只有「已確認有直屬主管」且「薪資至少持平 4.6 萬」兩個條件同時成立才考慮（見上方質性分析）。</div>
   </section>
 <script src="../assets/qa.js"></script>
+<script src="../assets/qual.js"></script>
 </main>
 
 <footer class="site-footer"><div class="inner">

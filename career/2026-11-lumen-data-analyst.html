@@ -26,6 +26,7 @@
     <a href="../company/2026-11-lumen-data-analyst.html">公司診斷</a>
     <a href="../career/2026-11-lumen-data-analyst.html" aria-current="page">職涯適配</a>
     <a href="../interview/2026-11-lumen-data-analyst.html">面試攻略</a>
+    <span class="off" title="面試後才會產出">現實度匹配</span>
   </nav>
 
   <section id="strengths-use" class="card">
@@ -140,11 +141,82 @@
     <div id="qa-result" class="callout qa-result"><div data-out></div></div>
   </section>
 
+  <section id="qual" class="card">
+    <h2>質性對答</h2>
+    <p>量性問卷告訴你「方向對不對」，這裡的開放式問題幫你找出「為什麼」。一次一題，回答後會依你的內容追問一題。全部答完會整理出你最在意的主題，並和這個職缺的風險比對；也可以下載紀錄，交給 AI 做深度分析（rules/career-fit.md §5.3）。答案只存在你的瀏覽器裡。</p>
+    <div class="qual" data-job="2026-11-lumen-data-analyst" data-title="數據分析師（電商）｜光點電商" data-risks="主管與團隊,工時與生活">
+      <div class="qual-q" data-theme="影響力" data-followups='[{"if":"報告|被採用|用|決策","ask":"上一次有這種感覺是什麼時候？發生了什麼？"},{"default":"可以舉一個具體的例子嗎？"}]'>
+        <label for="qual-1">1. 想像到職一年後的某個週一，發生什麼事會讓你覺得「這份工作來對了」？</label>
+        <textarea id="qual-1" rows="4" placeholder="想到什麼就寫什麼，越具體越好"></textarea>
+      </div>
+      <div class="qual-q" data-theme="主管與團隊" data-followups='[{"if":"主動|機會|整理","ask":"如果新主管的方向跟你想做的不一樣，你會怎麼做？"},{"if":"亂|怕|不安|焦慮","ask":"那段時間最讓你不安的是什麼？"},{"default":"可以舉一個具體的例子嗎？"}]'>
+        <label for="qual-2">2. 新任數據長正在重整流程，你過去遇到組織改變時，通常怎麼面對？</label>
+        <textarea id="qual-2" rows="4" placeholder="想到什麼就寫什麼，越具體越好"></textarea>
+      </div>
+      <div class="qual-q" data-theme="AI 與技術" data-followups='[{"if":"可惜|自己|下班","ask":"你在願景裡寫「懂資料也懂 AI」，這和你剛才的說法一致嗎？"},{"default":"可以舉一個具體的例子嗎？"}]'>
+        <label for="qual-3">3. 這份工作的 JD 沒提到 AI，你的感受是？</label>
+        <textarea id="qual-3" rows="4" placeholder="想到什麼就寫什麼，越具體越好"></textarea>
+      </div>
+      <div class="qual-q" data-theme="工時與生活" data-followups='[{"if":"可以|接受|常態","ask":"「不能接受」的界線大概在哪裡？例如每週幾天、幾點？"},{"if":"不行|家|累","ask":"如果有補休或彈性上班，會改變你的想法嗎？"},{"default":"可以舉一個具體的例子嗎？"}]'>
+        <label for="qual-4">4. 雙 11 旺季可能連續加班兩三週，你怎麼看？</label>
+        <textarea id="qual-4" rows="4" placeholder="想到什麼就寫什麼，越具體越好"></textarea>
+      </div>
+      <div class="qual-q" data-theme="職涯方向" data-followups='[{"if":"分析|數據|最強","ask":"這比較像資深分析師，還是資料產品經理？"},{"default":"可以舉一個具體的例子嗎？"}]'>
+        <label for="qual-5">5. 三年後的你，希望別人怎麼介紹你？</label>
+        <textarea id="qual-5" rows="4" placeholder="想到什麼就寫什麼，越具體越好"></textarea>
+      </div>
+      <div class="qual-q" data-theme="成長" data-followups='[{"if":"報表|機器|追","ask":"你會怎麼在面試中確認這件事？"},{"default":"可以舉一個具體的例子嗎？"}]'>
+        <label for="qual-6">6. 對這份工作，你最擔心的一件事是什麼？</label>
+        <textarea id="qual-6" rows="4" placeholder="想到什麼就寫什麼，越具體越好"></textarea>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" type="button" data-act="prev">上一題</button>
+        <button class="btn" type="button" data-act="next">下一步</button>
+        <button class="btn btn-ghost" type="button" data-act="reset">清除重來</button>
+        <span class="qual-progress"></span>
+      </div>
+      <div class="qual-out callout">
+        <div data-summary></div>
+        <label for="qual-md-2026-11-lumen-data-analyst"><strong>訪談紀錄（Markdown）</strong></label>
+        <textarea id="qual-md-2026-11-lumen-data-analyst" rows="8" readonly></textarea>
+        <div class="btn-row">
+          <button class="btn" type="button" data-act="copy">複製</button>
+          <button class="btn btn-ghost" type="button" data-act="download">下載 .md</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="qual-analysis" class="card">
+    <h2>質性分析（範例）</h2>
+    <p><small>依虛構人物的訪談紀錄 <a href="../raw/qa/2026-11-lumen-data-analyst.md">raw/qa/2026-11-lumen-data-analyst.md</a> 分析。你自己的紀錄請交給 AI，結果存在 private/。</small></p>
+    <h3>你真正在意的事</h3>
+    <ul>
+      <li><strong>分析被採用</strong>：「我最喜歡的就是分析被拿去用的那一刻」，影響力是最強的動機，比 vision.md 排的第 2 位更前面。</li>
+      <li><strong>變動期被看見</strong>：「變動期反而是被看見的機會」，對主管異動（R5）不是擔憂而是機會。</li>
+      <li><strong>擺脫實體零售標籤</strong>：「現在比較急的是脫離實體零售的標籤」，V3 的急迫度高於 V2。</li>
+      <li><strong>不要變成報表機器</strong>：「怕進去之後只是報表機器」，這是唯一明確的擔憂。</li>
+    </ul>
+    <h3>說法之間的矛盾</h3>
+    <ul>
+      <li>vision.md 把 V2「懂資料也懂 AI」列為目標，但訪談中說「AI 我下班自己玩就好」。追問後確認：AI 是加分項，不是現階段的核心。<strong>所以職涯頁「侷限」中的 AI 缺口，影響比原本估計的小。</strong></li>
+    </ul>
+    <h3>這對這個職缺代表什麼</h3>
+    <ul>
+      <li>主管異動（company 頁 R5）對你是正面因素，可在面試中主動表達願意協助新流程落地。</li>
+      <li>工時底線具體化為「平常每週超過兩天加到 9 點以後」，可對應面試反問 R4。</li>
+      <li>最大風險是「報表機器」，對應面試反問 R1，必須問清楚。</li>
+    </ul>
+    <h3>結論是否改變</h3>
+    <p><strong>維持「積極投遞」，信心提高。</strong>質性對答確認 AI 缺口不是關鍵，而職缺最大的吸引力（影響力、擺脫零售標籤）正是你最在意的事。</p>
+  </section>
+
   <section id="decision" class="card">
     <h2>結論</h2>
     <p><strong>建議：積極投遞。</strong>這份工作同時滿足 V1（有晉升到資料產品經理的路徑）與 V3（線上產品經歷），而且公司剛募資、團隊擴編，穩定度高。唯一沒被滿足的是 V2（AI），可以靠工作外自學或進去後小規模導入補足。<strong>進場前一定要確認：</strong>新任數據長重整流程後，這個職位的實際分工會不會偏向純報表。</p>
   </section>
 <script src="../assets/qa.js"></script>
+<script src="../assets/qual.js"></script>
 </main>
 
 <footer class="site-footer"><div class="inner">

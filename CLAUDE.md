@@ -8,6 +8,7 @@
   - `diagnose-company`：③-A 公司診斷與屎缺判定 → `company/<slug>.html`（需要 WebSearch）
   - `career-fit`：③-B 職涯適配與願景問答 → `career/<slug>.html`
   - `interview-prep`：③-C 模擬面試與反問題 → `interview/<slug>.html`
+  - `reality-check`：⑧ 面試後的現實度匹配、話語權與談薪策略 → `reality/<slug>.html`
   - `tailor-resume`：④ 客製化履歷 → `resumes/<slug>.html`
 - ③-A 與 ③-B 互不依賴，可以用 subagent 平行執行；③-C 要等兩者完成。
 - 完成標準一律以 `python3 scripts/check.py` 的輸出為準；不要只說「我檢查過了」。

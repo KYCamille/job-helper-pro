@@ -249,3 +249,40 @@ dl.meta dd { margin: 0; }
   .matrix { grid-template-columns: 3.2em 1fr 1fr; font-size: .8rem; gap: 4px; }
   .matrix > div { padding: 8px 6px; }
 }
+
+/* =========================================================
+   v2 新增：質性訪談、面試紀錄上傳、前後對照（AGENTS.md 第 7 節）
+   ========================================================= */
+textarea, input[type="text"] {
+  width: 100%; font: inherit; color: var(--text); background: var(--bg);
+  border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px;
+}
+textarea:focus, input[type="text"]:focus { outline: 2px solid var(--accent); border-color: transparent; }
+button.btn { border: none; cursor: pointer; font-family: inherit; }
+button.btn-ghost { border: 1px solid var(--accent); }
+button.btn:disabled { opacity: .4; cursor: default; }
+
+/* 質性訪談：一次只顯示一題 */
+.qual .qual-q { display: none; }
+.qual .qual-q.active { display: block; }
+.qual .qual-q > label { display: block; font-weight: 600; margin-bottom: 6px; }
+.qual-follow { margin-top: 10px; padding-left: 12px; border-left: 3px solid var(--accent); }
+.qual-follow label { display: block; color: var(--accent); font-weight: 600; margin-bottom: 4px; }
+.qual-progress { color: var(--muted); font-size: .875rem; }
+.qual-out, .intake-out { display: none; margin-top: 16px; }
+.qual-out.show, .intake-out.show { display: block; }
+
+/* 面試紀錄上傳 */
+.intake-items { padding-left: 1.2rem; }
+.intake-items > li { margin: 0 0 14px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; }
+.intake-items .hits { font-size: .875rem; color: var(--muted); margin: 6px 0; }
+.intake-items .hits .label { font-weight: 600; }
+.intake-items .marks label { display: inline-block; margin-right: 12px; cursor: pointer; }
+.intake-status { color: var(--muted); font-size: .9rem; }
+input[type="file"] { font: inherit; max-width: 100%; }
+
+/* 面試前 → 面試後 */
+.delta { white-space: nowrap; font-weight: 700; font-variant-numeric: tabular-nums; }
+.delta .up { color: var(--bad); }
+.delta .down { color: var(--good); }
+.delta .same { color: var(--muted); }

@@ -13,6 +13,8 @@ description: 分析職缺對求職者長期職涯的正面發揮、影響、方�
 3. 依序寫 `strengths-use`、`impact`、`direction`、`limits`，每點引用 profile 編號或 company 頁代碼。
 4. `alignment` 表：vision.md 每個項目逐一比對，只能用 ✅ ⚠️ ❌ ❓。
 5. `qa` 區塊：為**這個職缺**量身設計 8 題單選題（選項帶 data-weight），使用 `assets/qa.js`。
-6. `decision`：建議＋關鍵理由＋進場前必確認的一件事。
-7. 把所有 ❓ 交給 interview-prep 轉成反問題。
-8. 執行 `python3 scripts/check.py`。
+6. `qual` 區塊：6 題開放式問題＋追問規則（data-followups），`data-risks` 填 company 頁的風險主題，使用 `assets/qual.js`。
+7. `qual-analysis` 區塊：依 §5.3 寫「真正在意的事／矛盾／對職缺的意義／結論是否改變」，每點引用原話。
+8. `decision`（參考質性分析後再下結論）：建議＋關鍵理由＋進場前必確認的一件事。
+9. 把所有 ❓ 交給 interview-prep 轉成反問題。
+10. 執行 `python3 scripts/check.py`。

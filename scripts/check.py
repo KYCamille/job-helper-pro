@@ -7,6 +7,7 @@
 """
 from __future__ import annotations
 
+import json
 import re
 import sys
 from html.parser import HTMLParser
@@ -19,10 +20,14 @@ PAGE_RULES = {
     "job": ["summary", "requirements", "keywords", "match", "gaps", "interview", "sources"],
     "resume": ["target", "headline", "skills", "experience", "projects", "education", "changes"],
     "company": ["company-brief", "role", "dimensions", "trap", "sources"],
-    "career": ["strengths-use", "impact", "direction", "limits", "alignment", "qa", "decision"],
+    "career": ["strengths-use", "impact", "direction", "limits", "alignment", "qa", "qual", "qual-analysis", "decision"],
     "interview": ["questions", "reverse", "sources"],
+    "reality": ["record", "intake", "verify", "rescore", "hidden", "scenarios", "leverage", "negotiation", "sources"],
 }
-FOLDERS = {"job": "jobs", "resume": "resumes", "company": "company", "career": "career", "interview": "interview"}
+FOLDERS = {"job": "jobs", "resume": "resumes", "company": "company", "career": "career", "interview": "interview",
+           "reality": "reality"}
+ALLOWED_JS = ("assets/qa.js", "assets/qual.js", "assets/reality.js")
+VERIFY_MARKS = ("✅ 證實", "❌ 推翻", "➖ 仍不明")
 DEEP_KINDS = ("company", "career", "interview")  # 適配度 ≥ 60 才產出
 SLUG_RE = re.compile(r"^\d{4}-\d{2}-[a-z0-9]+(?:-[a-z0-9]+)+$")
 FIT_LEVELS = [(80, "badge-high"), (60, "badge-mid"), (0, "badge-low")]
@@ -45,7 +50,7 @@ def err(path: Path, msg: str) -> None:
 class Page(HTMLParser):
     """收集 meta、id、連結、class、section 文字、data-* 數值與 qa-card 結構。"""
 
-    CAPTURE = ("data-total", "data-trap-total", "data-signal", "data-dim")
+    CAPTURE = ("data-total", "data-trap-total", "data-signal", "data-dim", "data-lev", "data-lev-total")
 
     def __init__(self) -> None:
         super().__init__()
@@ -66,9 +71,11 @@ class Page(HTMLParser):
         self.fieldsets = 0
         self.radio_without_weight = 0
         self.has_subnav = False
+        self.attrs: list[dict] = []
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
+        self.attrs.append(a)
         self._depth += 1
         cls = (a.get("class") or "").split()
         if tag == "meta" and "name" in a:
@@ -89,7 +96,7 @@ class Page(HTMLParser):
         if tag == "section":
             self._sections.append(a.get("id"))
         sec = self._sections[-1] if self._sections else None
-        if tag == "article" and "qa-card" in cls and sec:
+        if tag in ("article", "div") and "qa-card" in cls and sec:
             self.qa_cards.setdefault(sec, []).append(set())
         elif sec in self.qa_cards and self.qa_cards[sec]:
             self.qa_cards[sec][-1].update(cls)
@@ -97,7 +104,7 @@ class Page(HTMLParser):
             self.fieldsets += 1
         if tag == "input" and a.get("type") == "radio" and "data-weight" not in a:
             self.radio_without_weight += 1
-        if tag == "span" and "meter" in cls and self._capture and self._capture[0] == "data-dim":
+        if tag == "span" and "meter" in cls and self._capture and self._capture[0] in ("data-dim", "data-lev"):
             self.dim_meters.append(a.get("data-score", ""))
         for key in self.CAPTURE:
             if key in a:
@@ -145,8 +152,8 @@ def check_common(path: Path, page: Page, text: str) -> None:
     if not any(h.endswith("assets/style.css") for h in page.links):
         err(path, "沒有引用 assets/style.css")
     for src in page.scripts:
-        if not src.endswith("assets/qa.js"):
-            err(path, f"只允許引用 assets/qa.js，發現 {src}")
+        if not src.endswith(ALLOWED_JS):
+            err(path, f"只允許引用 {'、'.join(ALLOWED_JS)}，發現 {src}")
     for href in page.links + page.scripts:
         if href.startswith(("http://", "https://", "mailto:", "#")):
             continue
@@ -211,10 +218,7 @@ def check_company(path: Path, page: Page) -> None:
         err(cf, f"公司資料至少 6 筆，目前 {len(records)} 筆（rules/company-diagnosis.md §2.2）")
     if len({t for _, t in records}) < 3:
         err(cf, "公司資料至少要涵蓋 3 種來源類型")
-    known = {c for c, _ in records}
-    body = "".join(t for sid, ts in page.section_text.items() if sid != "sources" for t in ts)
-    for code in sorted({m.group(0) for m in SOURCE_CODE_RE.finditer(body)} - known):
-        err(path, f"引用了公司資料中不存在的來源代碼 {code}（可能是捏造）")
+    check_codes(path, page, [cf], SOURCE_CODE_RE)
 
     # 五大維度：5 個、1–5 分、量表與文字一致
     dims = page.captured["data-dim"]
@@ -225,22 +229,9 @@ def check_company(path: Path, page: Page) -> None:
         if not m or not 1 <= int(m.group(1)) <= 5 or meter != m.group(1):
             err(path, f"維度分數需為 1–5 且量表 data-score 一致（文字「{txt.strip()}」、量表 {meter}）")
 
-    # 屎缺機率：基準 + 訊號加總 = 總機率，限制 5–95
-    signals = [int(s.replace("−", "-").replace("+", "").strip()) for s in page.captured["data-signal"]]
-    tot = re.search(r"(\d+)\s*%", "".join(page.captured["data-trap-total"]))
-    if not signals or signals[0] != 20:
-        err(path, "屎缺訊號表第一列必須是基準 +20")
-    if not tot:
-        err(path, "找不到屎缺機率總計（data-trap-total）")
+    prob = check_trap(path, page)
+    if prob is None:
         return
-    prob = int(tot.group(1))
-    expected = max(5, min(95, sum(signals)))
-    if prob != expected:
-        err(path, f"屎缺機率 {prob}% ≠ 訊號加總 {expected}%")
-    level = "prob-low" if prob < 40 else "prob-mid" if prob <= 60 else "prob-high"
-    badge = "badge-high" if prob < 40 else "badge-mid" if prob <= 60 else "badge-low"
-    if level not in page.classes or badge not in page.classes:
-        err(path, f"機率 {prob}% 應使用 {level} 與 {badge}")
     has_type = "trap-type" in page.ids
     if prob > 60 and not has_type:
         err(path, "屎缺機率 > 60% 必須有 trap-type 區塊")
@@ -248,6 +239,40 @@ def check_company(path: Path, page: Page) -> None:
         err(path, "屎缺機率 ≤ 60% 不可有 trap-type 區塊")
     if has_type and "hit" not in page.classes:
         err(path, "trap-type 矩陣必須用 .hit 標出判定的類型")
+
+
+def check_codes(path: Path, page: Page, files: list[Path], pattern: re.Pattern, exclude=("sources",)) -> None:
+    """頁面引用的來源代碼，必須真的存在於對應的資料檔中（防止捏造）。"""
+    known: set[str] = set()
+    for f in files:
+        if f.exists():
+            known |= set(re.findall(r"^- \[([A-Z]+-\d+)\]", f.read_text(encoding="utf-8"), flags=re.M))
+    body = "".join(t for sid, ts in page.section_text.items() if sid not in exclude for t in ts)
+    for code in sorted({m.group(0) for m in pattern.finditer(body)} - known):
+        err(path, f"引用了資料檔中不存在的來源代碼 {code}（可能是捏造）")
+
+
+def check_trap(path: Path, page: Page) -> int | None:
+    """屎缺機率：基準 + 訊號加總 = 總機率，限制 5–95，並檢查顏色分級。"""
+    signals = [int(s.replace("−", "-").replace("+", "").strip()) for s in page.captured["data-signal"]]
+    tot = re.search(r"(\d+)\s*%", "".join(page.captured["data-trap-total"]))
+    if not signals or signals[0] != 20:
+        err(path, "屎缺訊號表第一列必須是基準 +20")
+    if not tot:
+        err(path, "找不到屎缺機率總計（data-trap-total）")
+        return None
+    prob = int(tot.group(1))
+    expected = max(5, min(95, sum(signals)))
+    if prob != expected:
+        err(path, f"屎缺機率 {prob}% ≠ 訊號加總 {expected}%")
+    badge = "badge-high" if prob < 40 else "badge-mid" if prob <= 60 else "badge-low"
+    if badge not in page.classes:
+        err(path, f"機率 {prob}% 標題旁應使用 {badge}")
+    if page.meta.get("page-type") == "company":
+        level = "prob-low" if prob < 40 else "prob-mid" if prob <= 60 else "prob-high"
+        if level not in page.classes:
+            err(path, f"機率 {prob}% 應使用 {level}")
+    return prob
 
 
 def check_career(path: Path, page: Page) -> None:
@@ -261,6 +286,29 @@ def check_career(path: Path, page: Page) -> None:
         err(path, f"有 {page.radio_without_weight} 個選項缺少 data-weight")
     if not any(s.endswith("assets/qa.js") for s in page.scripts):
         err(path, "職涯頁必須引用 assets/qa.js")
+
+    # 質性對答（rules/career-fit.md §5.3）
+    qual_qs = [a for a in page.attrs if "qual-q" in (a.get("class") or "").split()]
+    if len(qual_qs) < 5:
+        err(path, f"質性對答至少 5 題開放式問題，目前 {len(qual_qs)} 題")
+    for i, a in enumerate(qual_qs, 1):
+        try:
+            rules = json.loads(a.get("data-followups") or "")
+            if not isinstance(rules, list) or not rules:
+                raise ValueError
+        except ValueError:
+            err(path, f"質性第 {i} 題的 data-followups 不是有效的 JSON 陣列")
+    roots = [a for a in page.attrs if "qual" in (a.get("class") or "").split()]
+    if not roots or not roots[0].get("data-risks"):
+        err(path, "質性對答區塊缺少 data-risks（職缺的風險主題）")
+    if not any(s.endswith("assets/qual.js") for s in page.scripts):
+        err(path, "職涯頁必須引用 assets/qual.js")
+    ana = text_of(page, "qual-analysis")
+    for sub in ("你真正在意的事", "說法之間的矛盾", "這對這個職缺代表什麼", "結論是否改變"):
+        if sub not in ana:
+            err(path, f"質性分析缺少「{sub}」")
+    if "「" not in ana:
+        err(path, "質性分析必須引用使用者原話（「」）")
 
 
 def check_interview(path: Path, page: Page) -> None:
@@ -284,6 +332,56 @@ def check_interview(path: Path, page: Page) -> None:
     for facet in ("職缺真實狀況", "成功標準", "資源與授權", "成長路徑", "自己的立基點"):
         if facet not in tags:
             err(path, f"反問題缺少「{facet}」面向")
+
+
+def check_reality(path: Path, page: Page, slug: str) -> None:
+    records = sorted((ROOT / "raw" / "interviews").glob(f"{slug}-r*.md"))
+    if not records:
+        err(path, f"沒有面試紀錄 raw/interviews/{slug}-r*.md，不可產出現實度匹配頁")
+        return
+    check_codes(path, page, records, re.compile(r"\bIV-\d+\b"))
+    cf = company_file_for(page)
+    if cf:
+        check_codes(path, page, [cf], SOURCE_CODE_RE)
+    verify = text_of(page, "verify")
+    marks = sum(verify.count(m) for m in VERIFY_MARKS)
+    if marks < 5:
+        err(path, f"驗證表至少 5 列且判定只能用 {'／'.join(VERIFY_MARKS)}，目前 {marks} 列")
+    check_trap(path, page)
+    # 話語權：5 因子平均
+    levs = []
+    for txt in page.captured["data-lev"]:
+        m = re.search(r"([1-5])\s*$", txt.strip())
+        levs.append(int(m.group(1)) if m else 0)
+    if len(levs) != 5 or 0 in levs:
+        err(path, f"話語權應有 5 個 1–5 分的因子，找到 {levs}")
+    else:
+        for txt, meter in zip(page.captured["data-lev"], page.dim_meters[-5:]):
+            if meter != txt.strip()[-1]:
+                err(path, f"話語權量表 data-score={meter} 與分數「{txt.strip()}」不一致")
+        tot = re.search(r"(\d(?:\.\d)?)", "".join(page.captured["data-lev-total"]))
+        if not tot or abs(float(tot.group(1)) - round(sum(levs) / 5, 1)) > 0.05:
+            err(path, f"話語權指數應為 {round(sum(levs) / 5, 1)}")
+    # 談判三個數字
+    nums = {}
+    for a in page.attrs:
+        for k in ("data-walkaway", "data-target", "data-anchor"):
+            if k in a and a[k].isdigit():
+                nums[k] = int(a[k])
+    if len(nums) != 3:
+        err(path, "談判區塊需要 data-walkaway、data-target、data-anchor 三個數字")
+    elif not nums["data-walkaway"] <= nums["data-target"] <= nums["data-anchor"]:
+        err(path, "談判數字必須 底線 ≤ 目標 ≤ 開價")
+    if "最壞情況" not in text_of(page, "scenarios"):
+        err(path, "未來狀況必須包含「最壞情況」")
+    tips = len(page.qa_cards.get("negotiation", []))
+    if tips < 5:
+        err(path, f"談判關鍵技巧至少 5 條，目前 {tips} 條")
+    items = [a for a in page.attrs if "data-keywords" in a]
+    if len(items) < 5:
+        err(path, f"上傳工具至少列出 5 個待確認項目，目前 {len(items)} 個")
+    if not any(s.endswith("assets/reality.js") for s in page.scripts):
+        err(path, "現實度匹配頁必須引用 assets/reality.js")
 
 
 def check_index(job_scores: dict[str, int | None]) -> None:
@@ -350,10 +448,24 @@ def main() -> int:
                 check_career(path, page)
             elif kind == "interview":
                 check_interview(path, page)
+            elif kind == "reality":
+                check_reality(path, page, slug)
+            # 有現實度匹配頁的職缺，所有分頁都要連過去；沒有的要顯示為未開放
+            has_reality = (ROOT / "reality" / f"{slug}.html").exists()
+            linked = f"../reality/{slug}.html" in page.links
+            if has_reality and not linked:
+                err(path, "已有現實度匹配頁，分頁列必須連到 reality/")
+            if not has_reality and linked:
+                err(path, "連到不存在的現實度匹配頁")
 
     for raw in sorted((ROOT / "raw" / "jobs").glob("*.md")):
         if not (ROOT / "jobs" / f"{raw.stem}.html").exists():
             err(raw, "有職缺原文但還沒有解析頁（流程停在 ① 收件）")
+
+    for rec in sorted((ROOT / "raw" / "interviews").glob("*-r*.md")):
+        slug = re.sub(r"-r\d+$", "", rec.stem)
+        if not (ROOT / "reality" / f"{slug}.html").exists():
+            err(rec, "有面試紀錄但還沒有現實度匹配頁（流程停在 ⑧ 之前）")
 
     guide = ROOT / "guide.html"
     check_common(guide, parse(guide), guide.read_text(encoding="utf-8"))

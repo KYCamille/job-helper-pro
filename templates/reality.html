@@ -1,0 +1,121 @@
+<!doctype html>
+<!--
+  reality 頁模板（面試後才產出，細則見 rules/reality-check.md）。細則見 rules/。複製到 interview/<slug>.html，把所有 {{...}} 換掉。
+  不可刪除任何 <section id="...">，不可改 id，不可加 inline style。
+-->
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{職稱}}｜{{公司}} — 現實度匹配｜求職小幫手 Pro</title>
+  <meta name="page-type" content="reality">
+  <meta name="slug" content="{{slug}}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700&display=swap">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site-header"><div class="inner">
+  <a class="logo" href="../index.html">求職<span>小幫手 Pro</span></a>
+  <nav class="nav"><a href="../index.html">職缺清單</a><a href="../guide.html">如何新增</a></nav>
+</div></header>
+
+<main>
+  <div class="breadcrumb"><a href="../index.html">首頁</a> › 現實度匹配</div>
+  <h1>{{職稱}}</h1>
+  <p class="company">{{公司}}</p>
+  <nav class="subnav">
+    <a href="../jobs/{{slug}}.html">職缺解析</a>
+    <a href="../resumes/{{slug}}.html">客製化履歷</a>
+    <a href="../company/{{slug}}.html">公司診斷</a>
+    <a href="../career/{{slug}}.html">職涯適配</a>
+    <a href="../interview/{{slug}}.html">面試攻略</a>
+    <a href="../reality/{{slug}}.html" aria-current="page">現實度匹配</a>
+  </nav>
+
+  <section id="record" class="card">
+    <h2>面試紀錄摘要</h2>
+    <dl class="meta"><dt>輪次</dt><dd>{{第 n 輪}}</dd><dt>日期</dt><dd>{{YYYY-MM-DD}}</dd><dt>面試官</dt><dd>{{職稱，不寫姓名}}</dd>
+    <dt>紀錄</dt><dd><a href="../raw/interviews/{{slug}}-r1.md">raw/interviews/{{slug}}-r1.md</a></dd></dl>
+    <div class="callout"><strong>一句話：</strong>{{面試後最重要的發現}}</div>
+  </section>
+
+  <section id="intake" class="card">
+    <h2>上傳你的面試紀錄</h2>
+    <div class="intake" data-job="{{slug}}" data-title="{{職稱}}｜{{公司}}">
+      <p><input type="file" accept=".txt,.md" aria-label="上傳面試紀錄"></p>
+      <textarea class="intake-text" rows="6" aria-label="貼上面試紀錄"></textarea>
+      <div class="btn-row"><button class="btn" type="button" data-act="scan">比對待確認項目</button></div>
+      <p class="intake-status" aria-live="polite"></p>
+      <ol class="intake-items">
+        <li data-item="{{代號}}" data-keywords="{{關鍵字1|關鍵字2}}"><strong>{{待確認項目}}</strong>（{{出處頁}}）<div class="hits"></div>
+          <div class="marks"><label><input type="radio" name="iv-{{代號}}" value="✅ 證實">✅ 證實</label><label><input type="radio" name="iv-{{代號}}" value="❌ 推翻">❌ 推翻</label><label><input type="radio" name="iv-{{代號}}" value="➖ 仍不明">➖ 仍不明</label></div>
+          <input class="evidence" type="text" aria-label="判定依據" placeholder="依據"></li>
+      </ol>
+      <div class="btn-row"><button class="btn" type="button" data-act="export">匯出比對紀錄</button></div>
+      <div class="intake-out callout"><textarea rows="8" readonly aria-label="比對紀錄"></textarea>
+        <div class="btn-row"><button class="btn" type="button" data-act="copy">複製</button><button class="btn btn-ghost" type="button" data-act="download">下載 .md</button></div></div>
+    </div>
+  </section>
+
+  <section id="verify" class="card">
+    <h2>推敲 vs. 現實</h2>
+    <div class="table-wrap"><table class="score-table">
+      <thead><tr><th>先前推敲</th><th>出處</th><th>面試中聽到</th><th>判定</th><th>影響</th></tr></thead>
+      <tbody><tr><td>{{}}</td><td>{{}}</td><td>{{}}（IV-n）</td><td>{{✅ 證實／❌ 推翻／➖ 仍不明}}</td><td>{{}}</td></tr></tbody>
+    </table></div>
+  </section>
+
+  <section id="rescore" class="card">
+    <h2>重新評分</h2>
+    <div class="table-wrap"><table class="score-table">
+      <thead><tr><th>指標</th><th>面試前</th><th>面試後</th><th>變動原因</th></tr></thead>
+      <tbody><tr><td>{{適配度／屎缺機率／屎缺類型／願景對齊／職涯成長性}}</td><td>{{}}</td><td class="delta"><span class="{{up|down|same}}">{{}}</span></td><td>{{}}</td></tr></tbody>
+    </table></div>
+    <h3>新的屎缺訊號表</h3>
+    <div class="table-wrap"><table class="score-table"><tbody>
+      <tr><td>基準</td><td class="num" data-signal>+20</td><td>所有職缺共同基準</td></tr>
+      <tr><td>{{R?／P?}}</td><td class="num" data-signal>{{+n／−n}}</td><td>{{代碼}}</td></tr>
+      <tr class="total"><td>屎缺機率</td><td class="num" data-trap-total>{{NN}}%</td><td>{{}}</td></tr>
+    </tbody></table></div>
+  </section>
+
+  <section id="hidden" class="card"><h2>隱藏的優缺點</h2>
+    <div class="two-col"><div><h3>隱藏優點</h3><ul><li>{{}}（IV-n）</li></ul></div><div><h3>隱藏缺點</h3><ul><li>{{}}（IV-n）</li></ul></div></div>
+  </section>
+
+  <section id="scenarios" class="card"><h2>未來會遇到的狀況</h2>
+    <div class="table-wrap"><table class="score-table"><thead><tr><th>時間點</th><th>最可能遇到的狀況</th><th>機率</th><th>你可以先準備什麼</th></tr></thead>
+    <tbody><tr><td>{{1 個月／3 個月／6 個月／1 年／最壞情況}}</td><td>{{}}</td><td>{{高／中／低}}</td><td>{{}}</td></tr></tbody></table></div>
+  </section>
+
+  <section id="leverage" class="card"><h2>你的話語權</h2>
+    <div class="table-wrap"><table class="score-table"><tbody>
+      <tr><td>{{公司急迫度／你的稀缺性／替代方案／時間點／資訊掌握}}</td><td class="num" data-lev><span class="meter" data-score="{{1-5}}"><i></i><i></i><i></i><i></i><i></i></span> {{n}}</td><td>{{}}</td></tr>
+      <tr class="total"><td>話語權指數</td><td class="num" data-lev-total>{{n.n}}</td><td>{{}}</td></tr>
+    </tbody></table></div>
+  </section>
+
+  <section id="negotiation" class="card"><h2>談薪資與條件</h2>
+    <div class="table-wrap"><table class="score-table"><tbody>
+      <tr><td>開價</td><td class="num" data-anchor="{{n}}">{{n}}</td><td>{{理由}}</td></tr>
+      <tr><td>目標</td><td class="num" data-target="{{n}}">{{n}}</td><td>{{理由}}</td></tr>
+      <tr><td>底線</td><td class="num" data-walkaway="{{n}}">{{n}}</td><td>{{理由}}</td></tr>
+    </tbody></table></div>
+    <h3>薪資以外的條件</h3><ol><li>{{條件}}：{{怎麼開口}}</li></ol>
+    <h3>關鍵技巧</h3>
+    <div class="qa-card"><h3>{{技巧}}</h3><div class="purpose"><span class="label">為什麼有效</span>{{}}</div><div class="good"><span class="label">話術</span>{{}}</div></div>
+    <h3>不要做的事</h3><ul><li>{{}}</li></ul>
+  </section>
+
+  <section id="sources" class="card"><h2>資料來源</h2>
+    <ul><li>面試紀錄：<a href="../raw/interviews/{{slug}}-r1.md">raw/interviews/{{slug}}-r1.md</a></li><li>公司資料：<a href="../raw/companies/{{公司}}.md">raw/companies/{{公司}}.md</a></li></ul>
+  </section>
+<script src="../assets/reality.js"></script>
+</main>
+
+<footer class="site-footer"><div class="inner">
+  本頁依 AGENTS.md 與 rules/ 規則產出。範例人物、公司、新聞與面試內容皆為虛構。
+</div></footer>
+</body>
+</html>

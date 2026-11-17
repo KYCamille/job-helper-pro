@@ -15,6 +15,7 @@
 | 公司 → 職缺 | 公司為什麼現在開這個缺？這是不是屎缺？ | `company/` | `rules/company-diagnosis.md` |
 | 職缺 → 我的未來 | 它會把我帶到哪裡？符合我的願景嗎？ | `career/` | `rules/career-fit.md` |
 | 面試現場 | 會被問什麼？我該反問什麼？ | `interview/` | `rules/interview.md` |
+| 面試之後 | 先前的推敲對不對？還有什麼隱藏的？我的話語權多大、怎麼談？ | `reality/` | `rules/reality-check.md` |
 
 網站的每一頁都是這套流程的產物。這個專案的重點不是「做出一個網頁」，而是**讓任何 AI 拿到一則新職缺，就能照同一套規則，在幾分鐘內產出一組格式一致、經得起檢查的新頁面**。
 
@@ -32,32 +33,38 @@ job-helper-pro/
 ├── rules/                 ← 細則：做到該步驟時才讀
 │   ├── company-diagnosis.md   公司與職缺診斷、屎缺判定
 │   ├── career-fit.md          職涯適配與願景問答
-│   └── interview.md           模擬面試與反問題
+│   ├── interview.md           模擬面試與反問題
+│   └── reality-check.md       面試後的現實度匹配與談判
 ├── CLAUDE.md              ← Claude Code 入口，只放 @AGENTS.md 與 Claude 專屬補充
 ├── README.md              ← 給人看的專案簡介
 ├── index.html             ← 首頁：流程說明 + 所有職缺卡片清單
 ├── guide.html             ← 「如何新增內容」說明頁（AGENTS.md 的網頁版摘要）
 ├── assets/
 │   ├── style.css          ← 全站唯一的樣式表（不要另外新增 CSS 檔）
-│   └── qa.js              ← 職涯願景互動問答（全站唯一的 JS）
+│   ├── qa.js              ← 量性問卷
+│   ├── qual.js            ← 質性互動訪談
+│   └── reality.js         ← 面試紀錄上傳與比對（只在瀏覽器內讀取）
 ├── profile/
 │   ├── profile.md         ← 求職者主履歷（唯一事實來源，AI 只能讀，不能改）
 │   └── vision.md          ← 職涯願景與價值排序（使用者自己寫，AI 只能讀）
 ├── raw/
 │   ├── jobs/<slug>.md     ← 職缺原文（使用者貼上的 JD，AI 只能讀，不能改）
-│   └── companies/<公司>.md ← 公司資料蒐集紀錄（新聞、官網、影音、評價，附來源代碼）
+│   ├── companies/<公司>.md ← 公司資料蒐集紀錄（新聞、官網、影音、評價，附來源代碼）
+│   ├── qa/<slug>.md        ← 質性訪談紀錄（公開版只放虛構範例）
+│   └── interviews/<slug>-r<n>.md ← 面試紀錄（公開版只放虛構範例）
 ├── jobs/<slug>.html       ← 職缺解析頁（AI 產出）
 ├── resumes/<slug>.html    ← 客製化履歷頁（AI 產出）
 ├── company/<slug>.html    ← 公司與職缺診斷頁（AI 產出）
 ├── career/<slug>.html     ← 職涯適配頁（AI 產出）
 ├── interview/<slug>.html  ← 面試攻略頁（AI 產出）
+├── reality/<slug>.html    ← 現實度匹配頁（面試後才產出）
 ├── templates/             ← 五種頁面模板（新增頁面一律從這裡複製）
-│   ├── job.html  resume.html  company.html  career.html  interview.html
+│   ├── job.html  resume.html  company.html  career.html  interview.html  reality.html
 ├── scripts/
 │   └── check.py           ← 自動檢查腳本（完成標準的依據）
 ├── .claude/skills/        ← 可重複使用的標準作業流程（SKILL.md）
 │   ├── analyze-job/  tailor-resume/
-│   └── diagnose-company/  career-fit/  interview-prep/
+│   └── diagnose-company/  career-fit/  interview-prep/  reality-check/
 └── private/               ← 真實個資放這裡；已在 .gitignore，永遠不會上傳
 ```
 
@@ -65,7 +72,8 @@ job-helper-pro/
 |---|---|---|
 | `profile/`、`raw/jobs/` | 讀取 | 修改、刪除（這是「事實來源」） |
 | `raw/companies/` | 新增蒐集到的資料（必附來源） | 刪除或改寫既有紀錄 |
-| `jobs/`、`resumes/`、`company/`、`career/`、`interview/` | 新增、修改 | 刪除既有頁面（除非使用者明確要求） |
+| `raw/qa/`、`raw/interviews/` | 讀取 | 修改（這是使用者的原話與現場紀錄） |
+| `jobs/`、`resumes/`、`company/`、`career/`、`interview/`、`reality/` | 新增、修改 | 刪除既有頁面（除非使用者明確要求） |
 | `index.html` | 在卡片清單新增／更新卡片 | 改動版面結構、刪掉別人的卡片 |
 | `assets/style.css` | 新增元件樣式（附註解） | 修改既有色彩 token、刪除既有 class |
 | `templates/`、`AGENTS.md`、`rules/`、`scripts/` | 提出修改建議 | 未經同意直接修改 |
@@ -79,7 +87,8 @@ job-helper-pro/
   - 例：`2026-11-lumen-data-analyst`、`2026-11-qingsong-ai-product-specialist`
   - `YYYY-MM` 是**收到職缺的月份**，不是截止日。
 - 同一個職缺的所有檔案**必須共用同一個 slug**：
-  - `raw/jobs/<slug>.md` → `jobs/` → `resumes/` → `company/` → `career/` → `interview/`
+  - `raw/jobs/<slug>.md` → `jobs/` → `resumes/` → `company/` → `career/` → `interview/` → `reality/`
+- 面試紀錄：`raw/interviews/<slug>-r1.md`、`-r2.md`……（第幾輪）
 - 公司資料檔用公司英文代稱：`raw/companies/lumen.md`（同一間公司的多個職缺共用）。
 - 每個 `raw/jobs/<slug>.md` 開頭要有一行 `- 公司資料：raw/companies/<公司>.md`。
 - 同公司同職位第二次出現時，在結尾加 `-v2`。
@@ -96,10 +105,11 @@ job-helper-pro/
 | `jobs/` | 見 4.1 | 本檔 |
 | `resumes/` | 見 4.2 | 本檔 |
 | `company/` | `company-brief` `role` `dimensions` `trap` （`trap-type`） `sources` | `rules/company-diagnosis.md` |
-| `career/` | `strengths-use` `impact` `direction` `limits` `alignment` `qa` `decision` | `rules/career-fit.md` |
+| `career/` | `strengths-use` `impact` `direction` `limits` `alignment` `qa` `qual` `qual-analysis` `decision` | `rules/career-fit.md` |
 | `interview/` | `questions` `reverse` `sources` | `rules/interview.md` |
+| `reality/` | `record` `intake` `verify` `rescore` `hidden` `scenarios` `leverage` `negotiation` `sources` | `rules/reality-check.md` |
 
-同一 slug 的五個頁面頂端都要有相同的分頁列 `<nav class="subnav">`（解析／履歷／公司診斷／職涯適配／面試攻略），目前頁面加 `aria-current="page"`。
+同一 slug 的頁面頂端都要有相同的分頁列 `<nav class="subnav">`（解析／履歷／公司診斷／職涯適配／面試攻略／現實度匹配），目前頁面加 `aria-current="page"`；還沒面試的職缺，「現實度匹配」用 `<span class="off">` 顯示為未開放。
 
 ### 4.1 職缺解析頁 `jobs/<slug>.html`
 
@@ -161,7 +171,7 @@ job-helper-pro/
 - **調性**：專業、冷靜、像一份整理好的顧問報告；不要花俏動畫、不要 emoji 標題。
 - **字體**：`Noto Sans TC`（Google Fonts），英文與數字同字體。
 - **色彩**：只用 `assets/style.css` 裡 `:root` 定義的 token（`--bg`、`--surface`、`--text`、`--muted`、`--accent`、`--good`、`--warn`、`--bad`、`--line`）。**不可在 HTML 裡寫死色碼或 inline style**。支援深色模式（已在 CSS 處理）。
-- **元件**：只用 CSS 已定義的 class：`.card`、`.badge`、`.tag`、`.btn`、`.score-table`、`.two-col`、`.callout`、`.breadcrumb`、`.flow`、`.subnav`、`.meter`、`.qa-card`、`.qa-form`、`.matrix`。需要新元件時，先在 `style.css` 末端新增並加註解。
+- **元件**：只用 CSS 已定義的 class：`.card`、`.badge`、`.tag`、`.btn`、`.score-table`、`.two-col`、`.callout`、`.breadcrumb`、`.flow`、`.subnav`、`.meter`、`.qa-card`、`.qa-form`、`.matrix`、`.qual`、`.intake`、`.delta`。需要新元件時，先在 `style.css` 末端新增並加註解。
 - **版面**：內容最寬 880px；手機寬度（375px）不能出現水平捲動。
 - **語言**：繁體中文、台灣用語；技術名詞保留英文（SQL、Python、ATS）。全形標點。
 
@@ -178,6 +188,7 @@ job-helper-pro/
 ```
 
 - ③-A 與 ③-B 互不依賴，可以平行做；③-C 必須等 ③-A、③-B 完成（反問題來自它們的「待確認」）。
+- **⑧ 現實度匹配**：面試後才觸發。使用者把面試紀錄放進 `raw/interviews/`（真實紀錄放 `private/interviews/`）並說「面試完了，幫我做現實度匹配 <slug>」→ 讀 `rules/reality-check.md` → 產出 `reality/<slug>.html` → 回到 ⑤ 檢查 → ⑦ 上架。每多一輪面試就更新一次。
 - **總分 < 60** 的職缺：只做 ① ② ⑤ ⑦，不做 ③ ④（不值得花時間深挖）。使用者明確要求時例外。
 
 | 節點 | 做什麼 | 產出 | 使用的 Skill |
@@ -187,6 +198,7 @@ job-helper-pro/
 | ③-A 公司診斷 | 讀 `rules/company-diagnosis.md`，先蒐集資料到 `raw/companies/`，再分析角色、五維度、屎缺機率 | `company/<slug>.html` | `diagnose-company` |
 | ③-B 職涯適配 | 讀 `rules/career-fit.md`，對照 `vision.md` 分析；需要時先做願景問答 | `career/<slug>.html` | `career-fit` |
 | ③-C 面試攻略 | 讀 `rules/interview.md`，出 10 題模擬題＋至少 5 題反問 | `interview/<slug>.html` | `interview-prep` |
+| ⑧ 現實度匹配 | 面試後。讀 `rules/reality-check.md`，驗證推敲、重新評分、隱藏優缺點、話語權與談判策略 | `reality/<slug>.html` | `reality-check` |
 | ④ 客製化 | 從模板建立履歷頁，遵守第 5 節誠實原則。**總分 < 60 時跳過此步**，職缺頁按鈕改為「未產出履歷」 | `resumes/<slug>.html` | `tailor-resume` |
 | ⑤ 自動檢查 | 執行 `python3 scripts/check.py`，必須 0 錯誤 | 檢查報告 | — |
 | ⑥ 審查 | **開新的對話**，只給 `profile.md`、raw JD、產出頁，請它逐條找捏造或誇大 | 審查意見 | — |
@@ -221,7 +233,9 @@ job-helper-pro/
 - 真實履歷放 `private/profile.md`；要用真實資料產出時，結果也只存在 `private/`，不放進 `jobs/`、`resumes/`。
 - `scripts/check.py` 會掃描電話號碼、Email、身分證字號格式，發現就報錯。
 - **對真實公司的「屎缺」判斷一律不公開**：只存 `private/`。判斷可能有誤，公開可能造成名譽爭議。公開網站只放虛構公司範例。
-- 願景問答的紀錄（`private/qa/`）屬於個人隱私，不 commit。
+- 願景問答與質性訪談的紀錄（`private/qa/`）屬於個人隱私，不 commit。
+- **真實面試紀錄（`private/interviews/`）一律不公開**：裡面有面試官與公司內部資訊。
+- 網頁上的互動工具（問卷、訪談、上傳紀錄）只在使用者的瀏覽器內運作，不會把資料送到任何伺服器；新增任何 JS 時都必須維持這個原則。
 
 ---
 
@@ -237,6 +251,13 @@ job-helper-pro/
 
 **願景問答**
 > 請先讀 rules/career-fit.md 第 5 節。一次問我一題，幫我釐清職涯願景，問完整理成 vision.md 草稿給我確認。
+
+**面試後的現實度匹配（真實面試，不公開）**
+> 請先讀 AGENTS.md 與 rules/reality-check.md。我把第一輪面試紀錄放在 private/interviews/<slug>-r1.md，
+> 幫我驗證先前的推敲、重新評分、分析隱藏優缺點與我的話語權，並擬好談薪策略，結果存在 private/reality/，不要 commit。
+
+**質性訪談深度分析**
+> 請依 rules/career-fit.md §5.3 分析 private/qa/<slug>.md。有矛盾或模糊的地方先問我，不要自己補答案。
 
 **修改既有履歷**
 > 請先讀 AGENTS.md。`resumes/2026-11-lumen-data-analyst.html` 的個人摘要太長，
